@@ -42,7 +42,16 @@ pipeline {
                 }
             }
         }
+
+        stage("Docker Push") {
+            steps {
+                script {
+                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt:latest"
+                }
+            }
+        }
     }
 }
+
 
 
