@@ -50,8 +50,16 @@ pipeline {
                 }
             }
         }
+
+        stage("Deploy Dev") {
+            steps {
+                script {
+                    sh "kubectl apply -f kubernetes/frontend-deployment-dev.yaml --namespace=dev"
+                    sh "kubectl apply -f kubernetes/frontend-service-dev.yaml --namespace=dev"
+                    sh "kubectl apply -f kubernetes/backend-deployment-dev.yaml --namespace=dev"
+                    sh "kubectl apply -f kubernetes/backend-service-dev.yaml --namespace=dev"
+                }
+            }
+        }
     }
 }
-
-
-
