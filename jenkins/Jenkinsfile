@@ -61,5 +61,14 @@ pipeline {
                 }
             }
         }
+
+        stage("Manual Approval") {
+            steps {
+                input {
+                    message "Soll das Deployment in Prod gestartet werden?"
+                    ok "Ja, weiter mit Prod"
+                }
+            }
+        }
     }
 }
