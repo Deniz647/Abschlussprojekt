@@ -38,7 +38,8 @@ pipeline {
         stage("Docker Build") {
             steps {
                 script {
-                    sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt:latest ."
+                    sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-backend:latest -f backend/Dockerfile ./backend"
+                    sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-frontend:latest -f frontend/Dockerfile ./frontend"
                 }
             }
         }
@@ -46,7 +47,8 @@ pipeline {
         stage("Docker Push") {
             steps {
                 script {
-                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt:latest"
+                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt-backend:latest"
+                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt-frontend:latest"
                 }
             }
         }
@@ -82,4 +84,3 @@ pipeline {
         }
     }
 }
-
