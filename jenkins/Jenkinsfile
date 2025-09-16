@@ -14,7 +14,7 @@ pipeline {
             steps {
                 dir("frontend") {
                     sh "npm install"
-                    sh "npm run build"
+                    // kein npm run build mehr, weil statisches HTML
                 }
             }
         }
