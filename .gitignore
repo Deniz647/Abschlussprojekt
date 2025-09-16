@@ -1,0 +1,14 @@
+# Node.js
+node_modules/
+build/
+
+# Java / Maven
+target/
+*.class
+
+# Logs
+*.log
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
