@@ -14,7 +14,7 @@ pipeline {
             steps {
                 dir("frontend") {
                     sh "npm install"
-                    // kein npm run build mehr, weil statisches HTML
+                    sh "npm run build"
                 }
             }
         }
@@ -40,6 +40,14 @@ pipeline {
                 script {
                     sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-backend:latest -f backend/Dockerfile ./backend"
                     sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-frontend:latest -f frontend/Dockerfile ./frontend"
+                }
+            }
+        }
+
+        stage("Docker Login") {
+            steps {
+                script {
+                    sh "az acr login --name skyerededucation"
                 }
             }
         }
