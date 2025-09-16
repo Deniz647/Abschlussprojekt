@@ -2,7 +2,7 @@
   "name": "kukuk-frontend",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo Building frontend...",
+    "build": "react-scripts build",
     "test": "jest"
   },
   "devDependencies": {
