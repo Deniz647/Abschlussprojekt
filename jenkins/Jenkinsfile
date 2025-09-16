@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        ACR_NAME = "skyerededucation.azurecr.io"
+    }
+
     stages {
         stage("Build Backend") {
             steps {
@@ -35,19 +39,19 @@ pipeline {
             }
         }
 
-        stage("Docker Build") {
+        stage("Docker Login") {
             steps {
-                script {
-                    sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-backend:latest -f backend/Dockerfile ./backend"
-                    sh "docker build -t skyerededucation.azurecr.io/abschlussprojekt-frontend:latest -f frontend/Dockerfile ./frontend"
+                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'ACR_USER', passwordVariable: 'ACR_PASS')]) {
+                    sh "echo $ACR_PASS | docker login $ACR_NAME -u $ACR_USER --password-stdin"
                 }
             }
         }
 
-        stage("Docker Login") {
+        stage("Docker Build") {
             steps {
                 script {
-                    sh "az acr login --name skyerededucation"
+                    sh "docker build -t $ACR_NAME/abschlussprojekt-backend:latest -f backend/Dockerfile ./backend"
+                    sh "docker build -t $ACR_NAME/abschlussprojekt-frontend:latest -f frontend/Dockerfile ./frontend"
                 }
             }
         }
@@ -55,8 +59,8 @@ pipeline {
         stage("Docker Push") {
             steps {
                 script {
-                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt-backend:latest"
-                    sh "docker push skyerededucation.azurecr.io/abschlussprojekt-frontend:latest"
+                    sh "docker push $ACR_NAME/abschlussprojekt-backend:latest"
+                    sh "docker push $ACR_NAME/abschlussprojekt-frontend:latest"
                 }
             }
         }
