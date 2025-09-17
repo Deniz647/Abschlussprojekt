@@ -68,10 +68,18 @@ pipeline {
         stage("Deploy Dev") {
             steps {
                 script {
-                    sh "kubectl --kubeconfig=denizcan-dev.conf apply -f kubernetes/frontend-deployment-dev.yaml --namespace=denizcan-dev"
-                    sh "kubectl --kubeconfig=denizcan-dev.conf apply -f kubernetes/frontend-service-dev.yaml --namespace=denizcan-dev"
-                    sh "kubectl --kubeconfig=denizcan-dev.conf apply -f kubernetes/backend-deployment-dev.yaml --namespace=denizcan-dev"
-                    sh "kubectl --kubeconfig=denizcan-dev.conf apply -f kubernetes/backend-service-dev.yaml --namespace=denizcan-dev"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-dev.conf apply -f kubernetes/frontend-deployment-dev.yaml --namespace=denizcan-dev"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-dev.conf apply -f kubernetes/frontend-service-dev.yaml --namespace=denizcan-dev"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-dev.conf apply -f kubernetes/backend-deployment-dev.yaml --namespace=denizcan-dev"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-dev.conf apply -f kubernetes/backend-service-dev.yaml --namespace=denizcan-dev"
+                }
+            }
+        }
+
+        stage("Manual Approval") {
+            steps {
+                script {
+                    input message: "Soll das Deployment in Prod gestartet werden?", ok: "Ja, weiter mit Prod"
                 }
             }
         }
@@ -79,10 +87,10 @@ pipeline {
         stage("Deploy Prod") {
             steps {
                 script {
-                    sh "kubectl --kubeconfig=denizcan-prod.conf apply -f kubernetes/frontend-deployment-prod.yaml --namespace=denizcan-prod"
-                    sh "kubectl --kubeconfig=denizcan-prod.conf apply -f kubernetes/frontend-service-prod.yaml --namespace=denizcan-prod"
-                    sh "kubectl --kubeconfig=denizcan-prod.conf apply -f kubernetes/backend-deployment-prod.yaml --namespace=denizcan-prod"
-                    sh "kubectl --kubeconfig=denizcan-prod.conf apply -f kubernetes/backend-service-prod.yaml --namespace=denizcan-prod"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-prod.conf apply -f kubernetes/frontend-deployment-prod.yaml --namespace=denizcan-prod"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-prod.conf apply -f kubernetes/frontend-service-prod.yaml --namespace=denizcan-prod"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-prod.conf apply -f kubernetes/backend-deployment-prod.yaml --namespace=denizcan-prod"
+                    sh "kubectl --kubeconfig=${WORKSPACE}/denizcan-prod.conf apply -f kubernetes/backend-service-prod.yaml --namespace=denizcan-prod"
                 }
             }
         }
